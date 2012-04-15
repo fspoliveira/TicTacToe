@@ -51,7 +51,7 @@ public class Validador {
 	public static void obterXml() throws ParserConfigurationException, SAXException, IOException {
 		
 		DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      //  document = parser.parse(new File("Shiporder.xml"));
+     // document = parser.parse(new File("Shiporder.xml"));
         InputSource is = new InputSource();
 		is.setCharacterStream(new StringReader(xmlRecords));
 		document = parser.parse(is);

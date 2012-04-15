@@ -2,6 +2,7 @@ package br.com.fiap.client;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -226,8 +227,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 		// draw Square
 		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-
+			super.paintComponent(g);		
 			g.drawRect(0, 0, 29, 29); // draw square
 			g.drawString(mark, 11, 20); // draw mark
 		} // end method paintComponent
