@@ -76,6 +76,7 @@ public class TicTacToeServer extends JFrame {
 		for (int i = 0; i < players.length; i++) {
 			try // wait for connection, create Player, start runnable
 			{
+				//Cria novo jogador
 				players[i] = new Player(server.accept(), i);
 				runGame.execute(players[i]); // execute player runnable
 			} // end try
@@ -181,6 +182,7 @@ public class TicTacToeServer extends JFrame {
 			try // obtain streams from Socket
 			{
 				input = new Scanner(connection.getInputStream());
+				System.out.println("Conexao dos jogadores");
 				output = new Formatter(connection.getOutputStream());
 			} // end try
 			catch (IOException ioException) {
@@ -239,6 +241,8 @@ public class TicTacToeServer extends JFrame {
 
 					if (input.hasNext())
 						location = input.nextInt(); // get move location
+					
+				    System.out.println("Movimento" + location + "Jogado " + playerNumber);
 
 					// check for valid move
 					if (validateAndMove(location, playerNumber)) {
