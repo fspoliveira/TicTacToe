@@ -6,6 +6,8 @@ import java.awt.BorderLayout;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Formatter;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -13,9 +15,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
+import java.util.regex.Pattern;
+
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+
+import br.com.fiap.bean.Move;
+import br.com.fiap.request.XMLMoveRequest;
+import br.com.fiap.teste.Mensagem;
+import br.com.fiap.teste.XMLRequest;
+
+import com.thoughtworks.xstream.XStream;
 
 public class TicTacToeServer extends JFrame {
 	/**
@@ -76,7 +87,7 @@ public class TicTacToeServer extends JFrame {
 		for (int i = 0; i < players.length; i++) {
 			try // wait for connection, create Player, start runnable
 			{
-				//Cria novo jogador
+				//New Player
 				players[i] = new Player(server.accept(), i);
 				runGame.execute(players[i]); // execute player runnable
 			} // end try
@@ -181,6 +192,9 @@ public class TicTacToeServer extends JFrame {
 
 			try // obtain streams from Socket
 			{
+				
+			  
+				
 				input = new Scanner(connection.getInputStream());
 				System.out.println("Conexao dos jogadores");
 				output = new Formatter(connection.getOutputStream());
@@ -238,9 +252,45 @@ public class TicTacToeServer extends JFrame {
 				// while game not over
 				while (!isGameOver()) {
 					int location = 0; // initialize move location
+					
+					String xml = "";
+					//Pattern pattern = Pattern.compile( "</..........>");  
 
-					if (input.hasNext())
-						location = input.nextInt(); // get move location
+					//if (input.hasNext())
+					//	location = input.nextInt(); // get move location
+					int i =0;
+					
+					while (i<5){
+						xml = xml +
+								input.nextLine(); // get move location
+						i++;
+						
+						System.out.println(xml);
+					}
+				     
+					
+					System.out.println(xml);
+				
+					
+				/*	
+				while (input.hasNextLine()){
+					xml = xml + input.nextLine(); // get move location
+					System.out.println("coNTEUDO XNML " + xml.toString());
+				}
+			*/
+					
+					
+					
+					//Teste XML
+					XStream xt = new XStream();
+					xt.alias("movePlayer", XMLMoveRequest.class);
+					
+					XMLMoveRequest request = (XMLMoveRequest) xt.fromXML(xml);
+					Move move  = request.getMove();
+					
+					
+					
+					location = Integer.parseInt(move.getMove());
 					
 				    System.out.println("Movimento" + location + "Jogado " + playerNumber);
 

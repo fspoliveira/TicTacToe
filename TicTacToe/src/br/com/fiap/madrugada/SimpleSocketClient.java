@@ -1,4 +1,4 @@
-package br.com.fia.madrugada;
+package br.com.fiap.madrugada;
 
 import java.io.ObjectInputStream;
 import java.net.InetAddress;

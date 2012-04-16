@@ -1,4 +1,4 @@
-package br.com.fia.madrugada;
+package br.com.fiap.madrugada;
 
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -16,8 +16,6 @@ public class SimpleSocketServer {
 		    str = " <?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		    str += "<ticketRequest><customer custID=\"1\">";
 		    str += "</ticketRequest>";
-		    
-		    
 
 		    serverSocket = new ServerSocket(portNumber);
 
@@ -36,5 +34,4 @@ public class SimpleSocketServer {
 		    }
 
 		  }
-
 }

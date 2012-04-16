@@ -17,6 +17,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
+import br.com.fiap.bean.Move;
+import br.com.fiap.request.XMLMoveRequest;
+import br.com.fiap.teste.Mensagem;
+import br.com.fiap.teste.XMLRequest;
+
+import com.thoughtworks.xstream.XStream;
+
 import java.util.Formatter;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
@@ -169,7 +177,25 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	public void sendClickedSquare(int location) {
 		// if it is my turn
 		if (myTurn) {
-			output.format("%d\n", location); // send location to server
+			
+			//String teste = "<move>" + location + "</move>";
+			
+			//Send move by XML
+			XMLMoveRequest xmr = new XMLMoveRequest();
+			Move move = new Move();
+			move.setMove(Integer.toString(location));
+			
+			xmr.setMove(move);
+			
+			XStream xt = new XStream();
+			xt.alias("movePlayer", XMLMoveRequest.class);
+			String xml = xt.toXML(xmr);
+			
+			//output.format("%d\n", teste); // send location to server
+			output.format("%s\n", xml); // send location to server
+			
+			System.out.println("Movimento do Cliente selecionado " + location);
+			
 			output.flush();
 			myTurn = false; // not my turn anymore
 		} // end if
