@@ -52,6 +52,9 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// set up user-interface and board
 	public TicTacToeClient(String host) {
+		
+		super("Tic-Tac-Toe Client"); // set title of window
+		
 		ticTacToeHost = host; // set name of server
 		displayArea = new JTextArea(4, 30); // set up JTextArea
 		displayArea.setEditable(false);
@@ -197,6 +200,8 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			System.out.println("Movimento do Cliente selecionado " + location);
 			
 			output.flush();
+			
+			
 			myTurn = false; // not my turn anymore
 		} // end if
 	} // end method sendClickedSquare

@@ -1,7 +1,5 @@
 package br.com.fiap.server;
 
-
-
 import java.awt.BorderLayout;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,6 +18,7 @@ import java.util.regex.Pattern;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
@@ -45,6 +44,7 @@ public class TicTacToeServer extends JFrame {
 	private Lock gameLock; // to lock game for synchronization
 	private Condition otherPlayerConnected; // to wait for other player
 	private Condition otherPlayerTurn; // to wait for other player's turn
+	private boolean weHaveAWinner = false;
 
 	// set up tic-tac-toe server and GUI that displays messages
 	public TicTacToeServer() {
@@ -87,7 +87,7 @@ public class TicTacToeServer extends JFrame {
 		for (int i = 0; i < players.length; i++) {
 			try // wait for connection, create Player, start runnable
 			{
-				//New Player
+				// New Player
 				players[i] = new Player(server.accept(), i);
 				runGame.execute(players[i]); // execute player runnable
 			} // end try
@@ -120,6 +120,92 @@ public class TicTacToeServer extends JFrame {
 				); // end call to SwingUtilities.invokeLater
 	} // end method displayMessage
 
+	public boolean checkWinning(int player, int location) {
+
+		if (location == 0) {
+			if ((board[1].equals(MARKS[player]) && board[2]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[8]
+							.equals(MARKS[player]))
+					|| (board[3].equals(MARKS[player]) && board[6]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 1) {
+			if ((board[0].equals(MARKS[player]) && board[2]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[7]
+							.equals(MARKS[player]))) {
+
+				return true;
+			}
+		} else if (location == 2) {
+			if ((board[0].equals(MARKS[player]) && board[1]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[6]
+							.equals(MARKS[player]))
+					|| (board[5].equals(MARKS[player]) && board[8]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 3) {
+			if ((board[0].equals(MARKS[player]) && board[6]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[5]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 4) {
+			if ((board[1].equals(MARKS[player]) && board[7]
+					.equals(MARKS[player]))
+					|| (board[2].equals(MARKS[player]) && board[6]
+							.equals(MARKS[player]))
+					|| (board[0].equals(MARKS[player]) && board[8]
+							.equals(MARKS[player]))
+					|| (board[3].equals(MARKS[player]) && board[5]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 5) {
+			if ((board[2].equals(MARKS[player]) && board[8]
+					.equals(MARKS[player]))
+					|| (board[3].equals(MARKS[player]) && board[4]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 6) {
+			if ((board[0].equals(MARKS[player]) && board[3]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[2]
+							.equals(MARKS[player]))
+					|| (board[7].equals(MARKS[player]) && board[8]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		} else if (location == 7) {
+			if ((board[1].equals(MARKS[player]) && board[4]
+					.equals(MARKS[player]))
+					|| (board[6].equals(MARKS[player]) && board[8]
+							.equals(MARKS[player])))
+
+			{
+				return true;
+			}
+		} else if (location == 8) {
+			if ((board[5].equals(MARKS[player]) && board[2]
+					.equals(MARKS[player]))
+					|| (board[4].equals(MARKS[player]) && board[0]
+							.equals(MARKS[player]))
+					|| (board[6].equals(MARKS[player]) && board[7]
+							.equals(MARKS[player]))) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
 	// determine if move is valid
 	public boolean validateAndMove(int location, int player) {
 		// while not current player, must wait for turn
@@ -140,6 +226,14 @@ public class TicTacToeServer extends JFrame {
 		// if location not occupied, make move
 		if (!isOccupied(location)) {
 			board[location] = MARKS[currentPlayer]; // set move on board
+			
+			
+			
+			if ( checkWinning(currentPlayer,location) ) {
+				 weHaveAWinner = true;
+			}
+			
+			
 			currentPlayer = (currentPlayer + 1) % 2; // change player
 
 			// let new current player know that move occurred
@@ -192,9 +286,6 @@ public class TicTacToeServer extends JFrame {
 
 			try // obtain streams from Socket
 			{
-				
-			  
-				
 				input = new Scanner(connection.getInputStream());
 				System.out.println("Conexao dos jogadores");
 				output = new Formatter(connection.getOutputStream());
@@ -207,7 +298,8 @@ public class TicTacToeServer extends JFrame {
 
 		// send message that other player moved
 		public void otherPlayerMoved(int location) {
-			output.format("Opponent moved\n");
+			if ( weHaveAWinner ) output.format( "Oponente venceu\n" ); 
+			else output.format("Opponent moved\n");
 			output.format("%d\n", location); // send location of move
 			output.flush(); // flush output
 		} // end method otherPlayerMoved
@@ -252,47 +344,47 @@ public class TicTacToeServer extends JFrame {
 				// while game not over
 				while (!isGameOver()) {
 					int location = 0; // initialize move location
-					
 					String xml = "";
-					//Pattern pattern = Pattern.compile( "</..........>");  
 
-					//if (input.hasNext())
-					//	location = input.nextInt(); // get move location
-					int i =0;
-					
-					while (i<5){
-						xml = xml +
-								input.nextLine(); // get move location
-						i++;
+					int i = 0;
+
+					/*
+					 * while (input.hasNext()){ xml = xml + input.nextLine(); //
+					 * get move location i++;
+					 * 
+					 * System.out.println(xml); }
+					 */
+					/*boolean b = true;*/
+
+					while (i<5) {
 						
-						System.out.println(xml);
+							xml = xml + input.nextLine(); // get move location
+
+							System.out.println(xml);
+							i++;
+
+						
 					}
-				     
-					
+
 					System.out.println(xml);
-				
-					
-				/*	
-				while (input.hasNextLine()){
-					xml = xml + input.nextLine(); // get move location
-					System.out.println("coNTEUDO XNML " + xml.toString());
-				}
-			*/
-					
-					
-					
-					//Teste XML
+
+					/*
+					 * while (input.hasNextLine()){ xml = xml +
+					 * input.nextLine(); // get move location
+					 * System.out.println("coNTEUDO XNML " + xml.toString()); }
+					 */
+
+					// Teste XML
 					XStream xt = new XStream();
 					xt.alias("movePlayer", XMLMoveRequest.class);
-					
+
 					XMLMoveRequest request = (XMLMoveRequest) xt.fromXML(xml);
-					Move move  = request.getMove();
-					
-					
-					
+					Move move = request.getMove();
+
 					location = Integer.parseInt(move.getMove());
-					
-				    System.out.println("Movimento" + location + "Jogado " + playerNumber);
+
+					System.out.println("Movimento" + location + "Jogado "
+							+ playerNumber);
 
 					// check for valid move
 					if (validateAndMove(location, playerNumber)) {
