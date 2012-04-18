@@ -338,7 +338,6 @@ public class TicTacToeServer extends JFrame {
 				} // end if
 				else {
 					output.format("Player O connected, please wait\n");
-					output.flush(); // flush output
 				} // end else
 
 				// while game not over
@@ -346,27 +345,15 @@ public class TicTacToeServer extends JFrame {
 					int location = 0; // initialize move location
 					String xml = "";
 
-					int i = 0;
-
-					/*
-					 * while (input.hasNext()){ xml = xml + input.nextLine(); //
-					 * get move location i++;
-					 * 
-					 * System.out.println(xml); }
-					 */
-					/*boolean b = true;*/
-
-					while (i<5) {
-						
-							xml = xml + input.nextLine(); // get move location
-
-							System.out.println(xml);
-							i++;
-
-						
-					}
-
-					System.out.println(xml);
+					
+                    //while(input.hasNext())	{
+                    	System.out.println(xml);
+                    	xml = input.useDelimiter("\\z").next().trim();
+                    	
+                    	 
+                  //  }
+					
+				 System.out.println(xml);
 
 					/*
 					 * while (input.hasNextLine()){ xml = xml +
