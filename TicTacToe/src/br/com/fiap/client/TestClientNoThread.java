@@ -2,7 +2,7 @@ package br.com.fiap.client;
 
 import javax.swing.JFrame;
 
-public class TesteNoTrhead {
+public class TestClientNoThread {
 	
 	public static void main(String [] args){
 

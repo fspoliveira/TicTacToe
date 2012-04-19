@@ -2,7 +2,7 @@ package br.com.fiap.server;
 
 import javax.swing.JFrame;
 
-public class TesteServer {
+public class TesteServerNoThread {
 
 	/**
 	 * @param args

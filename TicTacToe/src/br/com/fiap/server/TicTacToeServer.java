@@ -19,11 +19,15 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.text.StyledEditorKit.BoldAction;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
 import br.com.fiap.teste.Mensagem;
 import br.com.fiap.teste.XMLRequest;
+import br.com.fiap.validate.ValidateMove;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -227,12 +231,9 @@ public class TicTacToeServer extends JFrame {
 		if (!isOccupied(location)) {
 			board[location] = MARKS[currentPlayer]; // set move on board
 			
-			
-			
 			if ( checkWinning(currentPlayer,location) ) {
 				 weHaveAWinner = true;
 			}
-			
 			
 			currentPlayer = (currentPlayer + 1) % 2; // change player
 
@@ -344,34 +345,36 @@ public class TicTacToeServer extends JFrame {
 				while (!isGameOver()) {
 					int location = 0; // initialize move location
 					String xml = "";
-
+                    
+					//Get XML Move
+					xml = input.useDelimiter("\\z").next().trim();
 					
-                    //while(input.hasNext())	{
-                    	System.out.println(xml);
-                    	xml = input.useDelimiter("\\z").next().trim();
-                    	
-                    	 
-                  //  }
+					//Validate Move
+					ValidateMove validate = new ValidateMove(xml);
+					try {
+						validate.validar();
+					} catch (SAXException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParserConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
-				 System.out.println(xml);
-
-					/*
-					 * while (input.hasNextLine()){ xml = xml +
-					 * input.nextLine(); // get move location
-					 * System.out.println("coNTEUDO XNML " + xml.toString()); }
-					 */
-
-					// Teste XML
+					
+					System.out.println(xml.toString());
+                    
+					// Parse String XML to Object
 					XStream xt = new XStream();
-					xt.alias("movePlayer", XMLMoveRequest.class);
+					xt.alias("ticTacToeMove", XMLMoveRequest.class);
 
 					XMLMoveRequest request = (XMLMoveRequest) xt.fromXML(xml);
-					Move move = request.getMove();
+					Move move = request.getMovePlayer();
 
 					location = Integer.parseInt(move.getMove());
-
-					System.out.println("Movimento" + location + "Jogado "
-							+ playerNumber);
 
 					// check for valid move
 					if (validateAndMove(location, playerNumber)) {

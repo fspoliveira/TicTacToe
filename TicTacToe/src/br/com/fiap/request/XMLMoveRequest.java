@@ -4,14 +4,14 @@ import br.com.fiap.bean.Move;
 
 public class XMLMoveRequest {
 	
-	private Move move;
+	private Move movePlayer;
 
-	public Move getMove() {
-		return move;
+	public Move getMovePlayer() {
+		return movePlayer;
 	}
 
-	public void setMove(Move move) {
-		this.move = move;
+	public void setMovePlayer(Move movePlayer) {
+		this.movePlayer = movePlayer;
 	}
 
 }

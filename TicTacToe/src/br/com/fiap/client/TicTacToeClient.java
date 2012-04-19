@@ -188,10 +188,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			Move move = new Move();
 			move.setMove(Integer.toString(location));
 			
-			xmr.setMove(move);
+			xmr.setMovePlayer(move);
 			
 			XStream xt = new XStream();
-			xt.alias("movePlayer", XMLMoveRequest.class);
+			xt.alias("ticTacToeMove", XMLMoveRequest.class);
 			String xml = xt.toXML(xmr);
 			
 			//output.format("%d\n", teste); // send location to server
