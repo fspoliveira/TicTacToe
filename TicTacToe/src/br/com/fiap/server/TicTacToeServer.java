@@ -223,11 +223,11 @@ public class TicTacToeServer extends JFrame {
 		// if location not occupied, make move
 		if (!isOccupied(location)) {
 			board[location] = MARKS[currentPlayer]; // set move on board
-			
-			if ( checkWinning(currentPlayer,location) ) {
-				 weHaveAWinner = true;
+
+			if (checkWinning(currentPlayer, location)) {
+				weHaveAWinner = true;
 			}
-			
+
 			currentPlayer = (currentPlayer + 1) % 2; // change player
 
 			// let new current player know that move occurred
@@ -292,10 +292,17 @@ public class TicTacToeServer extends JFrame {
 
 		// send message that other player moved
 		public void otherPlayerMoved(int location) {
-			if ( weHaveAWinner ) output.format( "You Loose\n" ); 
-			else output.format("Opponent moved\n");
-			output.format("%d\n", location); // send location of move
-			output.flush(); // flush output
+			if (weHaveAWinner) {
+				output.format("You Loose\n");
+				output.format("%d\n", location);
+				output.flush(); // flush output
+			}
+
+			else {
+				output.format("Opponent moved\n");
+				output.format("%d\n", location); // send location of move
+				output.flush(); // flush output
+			}
 		} // end method otherPlayerMoved
 
 		// control thread's execution
@@ -338,11 +345,11 @@ public class TicTacToeServer extends JFrame {
 				while (!isGameOver()) {
 					int location = 0; // initialize move location
 					String xml = "";
-                    
-					//Get XML Move
+
+					// Get XML Move
 					xml = input.useDelimiter("\\z").next().trim();
-					
-					//Validate Move
+
+					// Validate Move
 					ValidateMove validate = new ValidateMove(xml);
 					try {
 						validate.validar();
@@ -356,9 +363,9 @@ public class TicTacToeServer extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					System.out.println(xml.toString());
-                    
+
 					// Parse String XML to Object
 					XStream xt = new XStream();
 					xt.alias("ticTacToeMove", XMLMoveRequest.class);
@@ -372,6 +379,12 @@ public class TicTacToeServer extends JFrame {
 					if (validateAndMove(location, playerNumber)) {
 						displayMessage("\nlocation: " + location);
 						output.format("Valid move.\n"); // notify client
+
+						System.out.println(weHaveAWinner);
+
+						if (weHaveAWinner)
+							output.format("You Win :-) \n");
+
 						output.flush(); // flush output
 					} // end if
 					else // move was invalid

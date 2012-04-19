@@ -1,6 +1,5 @@
 package br.com.fiap.client;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,9 +48,9 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// set up user-interface and board
 	public TicTacToeClient(String host) {
-		
+
 		super("Tic-Tac-Toe Client"); // set title of window
-		
+
 		ticTacToeHost = host; // set name of server
 		displayArea = new JTextArea(4, 30); // set up JTextArea
 		displayArea.setEditable(false);
@@ -130,14 +129,16 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	// process messages received by client
 	private void processMessage(String message) {
 		// valid move occurred
+
 		if (message.equals("Valid move.")) {
 			displayMessage("Valid move, please wait.\n");
-			
+
 			setMark(currentSquare, myMark); // set mark in square
-			
-			//Set Color for Player
-			currentSquare.setBackground( myMark.equals(X_MARK)  ? Color.green : Color.pink );
-			
+
+			// Set Color for Player
+			currentSquare.setBackground(myMark.equals(X_MARK) ? Color.green
+					: Color.pink);
+
 		} // end if
 		else if (message.equals("Invalid move, try again")) {
 			displayMessage(message + "\n"); // display invalid move
@@ -154,6 +155,26 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			displayMessage("Opponent moved. Your turn.\n");
 			myTurn = true; // now this client's turn
 		} // end else if
+
+		else if (message.equals("You Loose")) {
+			int location = input.nextInt(); // get move location
+			input.nextLine(); // skip newline after int location
+			int row = location / 3; // calculate row
+			int column = location % 3; // calculate column
+
+			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
+					: X_MARK)); // mark move
+			displayMessage("You Loose :-(");
+			myTurn = false; // now this client's turn
+		} // end else if
+
+		else if (message.equals("You Win")) {
+
+			displayMessage(message + "\n"); // display invalid move
+
+			myTurn = false; // now this client's turn
+		} // end else if
+
 		else
 			displayMessage(message + "\n"); // display the message
 	} // end method processMessage
@@ -182,22 +203,22 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	public void sendClickedSquare(int location) {
 		// if it is my turn
 		if (myTurn) {
-			
-			//Send move by XML
+
+			// Send move by XML
 			XMLMoveRequest xmr = new XMLMoveRequest();
 			Move move = new Move();
 			move.setMove(Integer.toString(location));
-			
+
 			xmr.setMovePlayer(move);
-			
+
 			XStream xt = new XStream();
 			xt.alias("ticTacToeMove", XMLMoveRequest.class);
 			String xml = xt.toXML(xmr);
-			
-			//output.format("%d\n", teste); // send location to server
+
+			// output.format("%d\n", teste); // send location to server
 			output.format("%s\n", xml); // send location to server
 			output.flush();
-			
+
 			myTurn = false; // not my turn anymore
 		} // end if
 	} // end method sendClickedSquare
@@ -254,7 +275,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 		// draw Square
 		public void paintComponent(Graphics g) {
-			super.paintComponent(g);		
+			super.paintComponent(g);
 			g.drawRect(0, 0, 29, 29); // draw square
 			g.drawString(mark, 11, 20); // draw mark
 		} // end method paintComponent
