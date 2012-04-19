@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Formatter;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
@@ -13,20 +11,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.Condition;
-import java.util.regex.Pattern;
-
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.text.StyledEditorKit.BoldAction;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
-import br.com.fiap.teste.Mensagem;
-import br.com.fiap.teste.XMLRequest;
 import br.com.fiap.validate.ValidateMove;
 
 import com.thoughtworks.xstream.XStream;
@@ -299,7 +292,7 @@ public class TicTacToeServer extends JFrame {
 
 		// send message that other player moved
 		public void otherPlayerMoved(int location) {
-			if ( weHaveAWinner ) output.format( "Oponente venceu\n" ); 
+			if ( weHaveAWinner ) output.format( "You Loose\n" ); 
 			else output.format("Opponent moved\n");
 			output.format("%d\n", location); // send location of move
 			output.flush(); // flush output
@@ -363,7 +356,6 @@ public class TicTacToeServer extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
 					
 					System.out.println(xml.toString());
                     

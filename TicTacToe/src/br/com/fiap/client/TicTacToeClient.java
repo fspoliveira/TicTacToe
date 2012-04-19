@@ -20,9 +20,6 @@ import javax.swing.SwingUtilities;
 
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
-import br.com.fiap.teste.Mensagem;
-import br.com.fiap.teste.XMLRequest;
-
 import com.thoughtworks.xstream.XStream;
 
 import java.util.Formatter;
@@ -135,7 +132,12 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		// valid move occurred
 		if (message.equals("Valid move.")) {
 			displayMessage("Valid move, please wait.\n");
+			
 			setMark(currentSquare, myMark); // set mark in square
+			
+			//Set Color for Player
+			currentSquare.setBackground( myMark.equals(X_MARK)  ? Color.green : Color.pink );
+			
 		} // end if
 		else if (message.equals("Invalid move, try again")) {
 			displayMessage(message + "\n"); // display invalid move
@@ -181,8 +183,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		// if it is my turn
 		if (myTurn) {
 			
-			//String teste = "<move>" + location + "</move>";
-			
 			//Send move by XML
 			XMLMoveRequest xmr = new XMLMoveRequest();
 			Move move = new Move();
@@ -196,11 +196,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			
 			//output.format("%d\n", teste); // send location to server
 			output.format("%s\n", xml); // send location to server
-			
-			System.out.println("Movimento do Cliente selecionado " + location);
-			
 			output.flush();
-			
 			
 			myTurn = false; // not my turn anymore
 		} // end if
