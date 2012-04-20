@@ -152,6 +152,11 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
+			
+			
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
+					: Color.green);
+			
 			displayMessage("Opponent moved. Your turn.\n");
 			myTurn = true; // now this client's turn
 		} // end else if
@@ -164,6 +169,11 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
+			
+			//Set Color board
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
+					: Color.green);
+			
 			displayMessage("You Loose :-(");
 			myTurn = false; // now this client's turn
 		} // end else if
