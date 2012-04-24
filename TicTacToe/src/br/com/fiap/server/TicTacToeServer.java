@@ -271,6 +271,10 @@ public class TicTacToeServer extends JFrame {
 		private int playerNumber; // tracks which player this is
 		private String mark; // mark for this player
 		private boolean suspended = true; // whether thread is suspended
+		private XMLMoveRequest xmr;
+		private Move move;
+		XStream xt;
+		
 
 		// set up Player thread
 		public Player(Socket socket, int number) {
@@ -293,9 +297,30 @@ public class TicTacToeServer extends JFrame {
 		// send message that other player moved
 		public void otherPlayerMoved(int location) {
 			if (weHaveAWinner) {
+				
+				/*//Create a move XML
+				xmr = new XMLMoveRequest();
+				move = new Move();
+				
+				move.setMove(Integer.toString(location));
+				move.setMessage("You Loose\n");
+				
+				xmr.setMovePlayer(move);
+				
+				xt = new XStream();
+				xt.alias("ticTacToeMove", XMLMoveRequest.class);
+				String xml = xt.toXML(xmr);
+				
+				output.format("%s\n", xml); // send location to server
+				
+				output.flush(); // flush output
+				*/
+
+			
 				output.format("You Loose\n");
 				output.format("%d\n", location);
 				output.flush(); // flush output
+				
 			}
 
 			else {
@@ -352,7 +377,7 @@ public class TicTacToeServer extends JFrame {
 					// Validate Move
 					ValidateMove validate = new ValidateMove(xml);
 					try {
-						validate.validar();
+						validate.validateXMLSchema();
 					} catch (SAXException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

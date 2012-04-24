@@ -73,7 +73,7 @@ public class ValidateMove {
 		
 	}
 
-	public  void validar() throws SAXException, IOException,
+	public  void validateXMLSchema() throws SAXException, IOException,
 			ParserConfigurationException {
 
 		try {
@@ -91,6 +91,7 @@ public class ValidateMove {
 			System.out.println("XML Validate OK");
 		} catch (SAXException s) {
 			s.printStackTrace();
+			System.exit(1); 
 		}
 	}
 

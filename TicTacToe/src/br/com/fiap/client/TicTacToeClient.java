@@ -1,12 +1,18 @@
 package br.com.fiap.client;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.io.IOException;
@@ -124,7 +130,54 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			if (input.hasNextLine())
 				processMessage(input.nextLine());
 		} // end while
+		
+		
 	} // end method run
+
+	private void drawLine(String xml) {
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+
+				Graphics g = boardPanel.getGraphics();
+
+				Graphics2D g2 = (Graphics2D) g;
+
+				Dimension d = getSize();
+				int w = d.width;
+				int h = d.height;
+
+				// BufferedImage buffImg = new BufferedImage(w, h,
+				// BufferedImage.TYPE_INT_ARGB);
+				// Graphics2D gbi = buffImg.createGraphics();
+				AlphaComposite ac = AlphaComposite
+						.getInstance(AlphaComposite.SRC);
+
+				int rectx = w / 4;
+				int recty = h / 4;
+
+				g2.setColor(new Color(0.0f, 0.0f, 1.0f, 1.0f));
+				// gbi.fill(new Line2D.Double(0, 70, 900, 70));
+
+				// g2.drawLine(0, 70, 900, 70);
+
+				g2.draw(new Line2D.Double(0, 75, 900, 75));
+
+				// gbi.setColor(new Color(1.0f, 0.0f, 0.0f, 1.0f));
+				g2.setComposite(ac);
+				// gbi.fill(new
+				// Ellipse2D.Double(rectx+rectx/2,recty+recty/2,150,100)); //
+				// Draws the buffered image. g2.drawImage(buffImg, null, 0, 0);
+
+			}
+		});
+		// g.setColor(Color.red) ;
+
+		// g.drawLine(0, 70, 900, 70);
+
+		// repaint();
+
+	}
 
 	// process messages received by client
 	private void processMessage(String message) {
@@ -152,11 +205,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
-			
-			
+
 			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
 					: Color.green);
-			
+
 			displayMessage("Opponent moved. Your turn.\n");
 			myTurn = true; // now this client's turn
 		} // end else if
@@ -169,13 +221,18 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
+
+			// Set Color board
 			
-			//Set Color board
-			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
-					: Color.green);
+			board[row][column].setBackground(myMark.equals(X_MARK) ?
+			 Color.pink : Color.green);
 			
 			displayMessage("You Loose :-(");
+
 			myTurn = false; // now this client's turn
+			
+			drawLine("xml");
+			
 		} // end else if
 
 		else if (message.equals("You Win")) {
@@ -201,12 +258,13 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// utility method to set mark on board in event-dispatch thread
 	private void setMark(final Square squareToMark, final String mark) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+		//SwingUtilities.invokeLater(new Runnable() {
+			//public void run() {
 				squareToMark.setMark(mark); // set mark in square
-			} // end method run
-		} // end anonymous inner class
-				); // end call to SwingUtilities.invokeLater
+
+		//	} // end method run
+		//} // end anonymous inner class
+			//	); // end call to SwingUtilities.invokeLater
 	} // end method setMark
 
 	// send message to server indicating clicked square
@@ -216,8 +274,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			// Send move by XML
 			XMLMoveRequest xmr = new XMLMoveRequest();
+
 			Move move = new Move();
 			move.setMove(Integer.toString(location));
+			move.setMessage("");
 
 			xmr.setMovePlayer(move);
 
