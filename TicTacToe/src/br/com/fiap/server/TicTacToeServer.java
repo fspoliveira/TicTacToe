@@ -285,7 +285,6 @@ public class TicTacToeServer extends JFrame {
 			try // obtain streams from Socket
 			{
 				input = new Scanner(connection.getInputStream());
-				System.out.println("Conexao dos jogadores");
 				output = new Formatter(connection.getOutputStream());
 			} // end try
 			catch (IOException ioException) {
