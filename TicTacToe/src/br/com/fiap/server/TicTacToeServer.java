@@ -276,7 +276,10 @@ public class TicTacToeServer extends JFrame {
 		private XMLMoveRequest xmr;
 		private Move move;
 		XStream xt;
-		
+		private Mark markPlayer;
+		private XMLMoveResponse xmlMoveResponse;
+		private XStream xstream;
+		private String xml;
 
 		// set up Player thread
 		public Player(Socket socket, int number) {
@@ -336,18 +339,19 @@ public class TicTacToeServer extends JFrame {
 			// send client its mark (X or O), process messages from client
 			try {
 				
-				Mark markPlayer = new Mark(mark);
-			
-				XMLMoveResponse xmr = new XMLMoveResponse();
-				xmr.setMark(markPlayer);
+				markPlayer = new Mark(mark);	
 				
-				XStream xtr = new XStream();
-				xtr.alias("ticTacToe", XMLMoveResponse.class);
-				String xmlr = xtr.toXML(xmr);
+				//Create XML Server Response
+				xmlMoveResponse = new XMLMoveResponse();
+				xmlMoveResponse.setMark(markPlayer);
+				
+				xstream = new XStream();
+				xstream.alias("ticTacToe", XMLMoveResponse.class);
+				xml = xstream.toXML(xmlMoveResponse);
    
 				
 				displayMessage("Player " + mark + " connected\n");
-				output.format("%s\n", xmlr); // send player's mark
+				output.format("%s\n", xml); // send player's mark
 				output.flush(); // flush output
 
 				// if player X, wait for another player to arrive

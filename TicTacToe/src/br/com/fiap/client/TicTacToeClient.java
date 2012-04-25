@@ -115,6 +115,8 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		
 		String xmlResponse = input.useDelimiter("\\z").next().trim(); // get player's mark (X or O)
 		
+		System.out.println("Metodo run do client\n" + xmlResponse);
+		
 		// Parse Response String from Server XML to Object
 		XStream xt = new XStream();
 		xt.alias("ticTacToe", XMLMoveResponse.class);
@@ -158,6 +160,9 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private void processMessage(String message) {
 		// valid move occurred
 
+		
+		
+		
 		if (message.equals("Valid move.")) {
 			displayMessage("Valid move, please wait.\n");
 
