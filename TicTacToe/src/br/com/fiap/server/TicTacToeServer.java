@@ -18,8 +18,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import br.com.fiap.bean.Mark;
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
+import br.com.fiap.response.XMLMoveResponse;
 import br.com.fiap.validate.ValidateMove;
 
 import com.thoughtworks.xstream.XStream;
@@ -333,8 +335,19 @@ public class TicTacToeServer extends JFrame {
 		public void run() {
 			// send client its mark (X or O), process messages from client
 			try {
+				
+				Mark markPlayer = new Mark(mark);
+			
+				XMLMoveResponse xmr = new XMLMoveResponse();
+				xmr.setMark(markPlayer);
+				
+				XStream xtr = new XStream();
+				xtr.alias("ticTacToe", XMLMoveResponse.class);
+				String xmlr = xtr.toXML(xmr);
+   
+				
 				displayMessage("Player " + mark + " connected\n");
-				output.format("%s\n", mark); // send player's mark
+				output.format("%s\n", xmlr); // send player's mark
 				output.flush(); // flush output
 
 				// if player X, wait for another player to arrive
@@ -390,7 +403,7 @@ public class TicTacToeServer extends JFrame {
 
 					System.out.println(xml.toString());
 
-					// Parse String XML to Object
+					// Parse String Request XMLfrom Client to Object
 					XStream xt = new XStream();
 					xt.alias("ticTacToeMove", XMLMoveRequest.class);
 

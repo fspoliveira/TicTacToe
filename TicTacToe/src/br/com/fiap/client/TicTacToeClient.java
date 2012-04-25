@@ -1,18 +1,12 @@
 package br.com.fiap.client;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.io.IOException;
@@ -25,6 +19,8 @@ import javax.swing.SwingUtilities;
 
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
+import br.com.fiap.response.XMLMoveResponse;
+
 import com.thoughtworks.xstream.XStream;
 
 import java.util.Formatter;
@@ -113,7 +109,17 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// control thread that allows continuous update of displayArea
 	public void run() {
-		myMark = input.nextLine(); // get player's mark (X or O)
+		
+		
+		//myMark = input.nextLine(); // get player's mark (X or O)
+		
+		String xmlResponse = input.useDelimiter("\\z").next().trim(); // get player's mark (X or O)
+		
+		// Parse Response String from Server XML to Object
+		XStream xt = new XStream();
+		xt.alias("ticTacToe", XMLMoveResponse.class);
+		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xmlResponse);		
+		myMark = response.getMark().getMark();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -128,7 +134,8 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		// receive messages sent to client and output them
 		while (true) {
 			if (input.hasNextLine())
-				processMessage(input.nextLine());
+				//processMessage(input.nextLine());
+				processMessage(input.useDelimiter("\\n").next().trim());
 		} // end while
 		
 		
