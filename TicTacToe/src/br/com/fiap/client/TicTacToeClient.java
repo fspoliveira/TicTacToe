@@ -47,6 +47,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private boolean myTurn; // determines which client's turn it is
 	private final String X_MARK = "X"; // mark for first client
 	private final String O_MARK = "O"; // mark for second client
+	private XMLMoveRequest xmr;
+	private Move move;
+	XStream xt ;
+	String xml;
 
 	// set up user-interface and board
 	public TicTacToeClient(String host) {
@@ -160,9 +164,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private void processMessage(String message) {
 		// valid move occurred
 
-		
-		
-		
 		if (message.equals("Valid move.")) {
 			displayMessage("Valid move, please wait.\n");
 
@@ -253,21 +254,39 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		if (myTurn) {
 
 			// Send move by XML
-			XMLMoveRequest xmr = new XMLMoveRequest();
+			
+			
+			try {
+				output = new Formatter(connection.getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		/*	xml = null;
+			move = null;
+			xt = null;
+			*/
+			 
+            xmr = new XMLMoveRequest();
 
-			Move move = new Move();
+			move = new Move();
 			move.setMove(location);
 			move.setMessage("");
 
 			xmr.setMovePlayer(move);
 
-			XStream xt = new XStream();
+			xt = new XStream();
 			xt.alias("ticTacToeMove", XMLMoveRequest.class);
-			String xml = xt.toXML(xmr);
+			 xml = xt.toXML(xmr);
 
 			// output.format("%d\n", teste); // send location to server
 			output.format("%s\n", xml); // send location to server
+			
+			
 			output.flush();
+			
+			
 
 			myTurn = false; // not my turn anymore
 		} // end if

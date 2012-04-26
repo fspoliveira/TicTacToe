@@ -280,6 +280,7 @@ public class TicTacToeServer extends JFrame {
 		private XMLMoveResponse xmlMoveResponse;
 		private XStream xstream;
 		private String xml;
+		private ValidateMove validate;
 
 		// set up Player thread
 		public Player(Socket socket, int number) {
@@ -404,12 +405,23 @@ public class TicTacToeServer extends JFrame {
 				while (!isGameOver()) {
 					int location = 0; // initialize move location
 					String xml = "";
+					
+					
+					try {
+						input = new Scanner(connection.getInputStream());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 					// Get XML Move
 					xml = input.useDelimiter("\\z").next().trim();
+					
+					
+					System.out.println("To no server recebendo o movimento do cliente\n" + xml);
 
 					// Validate Move
-					ValidateMove validate = new ValidateMove(xml);
+					validate = new ValidateMove(xml);
 					try {
 						validate.validateXMLSchema();
 					} catch (SAXException e) {
