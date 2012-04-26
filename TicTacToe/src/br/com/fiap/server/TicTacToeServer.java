@@ -333,6 +333,24 @@ public class TicTacToeServer extends JFrame {
 				output.flush(); // flush output
 			}
 		} // end method otherPlayerMoved
+		
+		
+		
+		public String createXMLResponse(String msg, int location) {
+			markPlayer = new Mark(mark);
+			move = new Move(location, msg);
+
+			// Create XML Server Response
+			xmlMoveResponse = new XMLMoveResponse();
+			xmlMoveResponse.setMark(markPlayer);
+			xmlMoveResponse.setMove(move);
+
+			xstream = new XStream();
+			xstream.alias("ticTacToe", XMLMoveResponse.class);
+			return xstream.toXML(xmlMoveResponse);
+
+		}
+		
 
 		// control thread's execution
 		public void run() {
@@ -414,7 +432,7 @@ public class TicTacToeServer extends JFrame {
 					XMLMoveRequest request = (XMLMoveRequest) xt.fromXML(xml);
 					Move move = request.getMovePlayer();
 
-					location = Integer.parseInt(move.getMove());
+					location = move.getMove();
 
 					// check for valid move
 					if (validateAndMove(location, playerNumber)) {

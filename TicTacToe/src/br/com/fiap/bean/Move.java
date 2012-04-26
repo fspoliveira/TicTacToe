@@ -2,18 +2,32 @@ package br.com.fiap.bean;
 
 public class Move {
 	
-	private String move;
+	private int move;
 	private String message;
 	
 	public Move(){}
 
-	public String getMove() {
+	
+
+	public Move(int move, String message) {
+		super();
+		this.move = move;
+		this.message = message;
+	}
+
+
+
+	public int getMove() {
 		return move;
 	}
 
-	public void setMove(String move) {
+
+
+	public void setMove(int move) {
 		this.move = move;
 	}
+
+
 
 	public String getMessage() {
 		return message;

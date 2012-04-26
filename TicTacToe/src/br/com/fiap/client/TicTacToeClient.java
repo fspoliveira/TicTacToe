@@ -256,7 +256,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			XMLMoveRequest xmr = new XMLMoveRequest();
 
 			Move move = new Move();
-			move.setMove(Integer.toString(location));
+			move.setMove(location);
 			move.setMessage("");
 
 			xmr.setMovePlayer(move);
