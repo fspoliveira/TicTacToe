@@ -4,6 +4,7 @@ public class Move {
 
 	private int move;
 	private String message;
+	private Mark id;
 
 	public Move() {
 	}
@@ -12,6 +13,13 @@ public class Move {
 		super();
 		this.move = move;
 		this.message = message;
+	}
+
+	public Move(int move, String message, Mark id) {
+		super();
+		this.move = move;
+		this.message = message;
+		this.id = id;
 	}
 
 	public int getMove() {
@@ -28,6 +36,14 @@ public class Move {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Mark getId() {
+		return id;
+	}
+
+	public void setId(Mark id) {
+		this.id = id;
 	}
 
 }

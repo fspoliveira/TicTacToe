@@ -1,11 +1,11 @@
 package br.com.fiap.bean;
 
 public class Mark {
-	
+
 	private String mark;
-	
-	public Mark(){
-		
+
+	public Mark() {
+
 	}
 
 	public Mark(String mark) {
@@ -20,7 +20,5 @@ public class Mark {
 	public void setMark(String mark) {
 		this.mark = mark;
 	}
-	
-	
 
 }

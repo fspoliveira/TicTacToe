@@ -1,17 +1,17 @@
 package br.com.fiap.bean;
 
-public class Line {
+public class DrawLine {
 
 	private int x1;
 	private int y1;
 	private int x2;
 	private int y2;
 
-	public Line() {
+	public DrawLine() {
 
 	}
 
-	public Line(int x1, int y1, int x2, int y2) {
+	public DrawLine(int x1, int y1, int x2, int y2) {
 		super();
 		this.x1 = x1;
 		this.y1 = y1;

@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import br.com.fiap.bean.Mark;
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
 import br.com.fiap.response.XMLMoveResponse;
@@ -49,8 +50,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private final String O_MARK = "O"; // mark for second client
 	private XMLMoveRequest xmr;
 	private Move move;
-	XStream xt;
-	String xml;
+	private XStream xt;
+	private String xml;
+	private Mark id;
+	
 
 	// set up user-interface and board
 	public TicTacToeClient(String host) {
@@ -339,12 +342,16 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			 */
 
 			xmr = new XMLMoveRequest();
+			
+			id = new Mark(myMark);
 
 			move = new Move();
 			move.setMove(location);
 			move.setMessage("");
+			move.setId(id);
 
 			xmr.setMovePlayer(move);
+			
 
 			xt = new XStream();
 			xt.alias("ticTacToeMove", XMLMoveRequest.class);
