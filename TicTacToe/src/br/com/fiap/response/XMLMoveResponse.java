@@ -6,23 +6,10 @@ import br.com.fiap.bean.Move;
 public class XMLMoveResponse {
 	private Mark mark;
 	private Move move;
-	private String message;
+	
 		
 	public XMLMoveResponse(){
 		
-	}
-
-	public XMLMoveResponse(Mark mark) {
-		super();
-		this.mark = mark;
-	}
-	
-
-	public XMLMoveResponse(Mark mark, Move move, String message) {
-		super();
-		this.mark = mark;
-		this.move = move;
-		this.message = message;
 	}
 
 	public XMLMoveResponse(Mark mark, Move move) {
@@ -47,13 +34,6 @@ public class XMLMoveResponse {
 		this.move = move;
 	}
 
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 	
 	
 }
