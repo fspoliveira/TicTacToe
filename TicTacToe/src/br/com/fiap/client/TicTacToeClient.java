@@ -49,7 +49,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private final String O_MARK = "O"; // mark for second client
 	private XMLMoveRequest xmr;
 	private Move move;
-	XStream xt ;
+	XStream xt;
 	String xml;
 
 	// set up user-interface and board
@@ -113,18 +113,21 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// control thread that allows continuous update of displayArea
 	public void run() {
-		
-		
-		//myMark = input.nextLine(); // get player's mark (X or O)
-		
-		String xmlResponse = input.useDelimiter("\\z").next().trim(); // get player's mark (X or O)
-		
+
+		// myMark = input.nextLine(); // get player's mark (X or O)
+
+		String xmlResponse = input.useDelimiter("\\z").next().trim(); // get
+																		// player's
+																		// mark
+																		// (X or
+																		// O)
+
 		System.out.println("Metodo run do client\n" + xmlResponse);
-		
+
 		// Parse Response String from Server XML to Object
 		XStream xt = new XStream();
 		xt.alias("ticTacToe", XMLMoveResponse.class);
-		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xmlResponse);		
+		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xmlResponse);
 		myMark = response.getMark().getMark();
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -139,26 +142,23 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 		// receive messages sent to client and output them
 		while (true) {
-			
-			//teste
+
+			// teste
 			try {
-				//Fix String Buffer (1024) clas Scanner
+				// Fix String Buffer (1024) clas Scanner
 				input = new Scanner(connection.getInputStream());
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			
-			//if (input.hasNextLine())
-				//processMessage(input.nextLine());
-				 
-				
-				
-				processMessage(input.useDelimiter("\\z").next().trim());
-			
+
+			// if (input.hasNextLine())
+			// processMessage(input.nextLine());
+
+			processMessage(input.useDelimiter("\\z").next().trim());
+
 		} // end while
-		
-		
+
 	} // end method run
 
 	private void drawLine(String xml) {
@@ -167,20 +167,64 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			public void run() {
 
 				Graphics g = boardPanel.getGraphics();
-			    g.setColor(Color.DARK_GRAY);
+				g.setColor(Color.RED);
+
+				/*****************************
+				 * Horizontal Lines
+				 ******************************/
+
+				// primeira linha horizontal
+				g.drawLine(0, 15, 900, 15);
+
+				// Segunda linha horizontal
+				g.drawLine(0, 45, 900, 45);
+
+				// terceira reta Horizontal
 				g.drawLine(0, 75, 900, 75);
+
+				/*****************************
+				 * Vertical Lines
+				 ******************************/
+
+				// primeira linha vertical
+				g.drawLine(14, 0, 0, 3000);
+
+				// second linha vertical
+			   g.drawLine(46, 0, 0, 3000);
+
+			g.drawLine(74, 0, 0, 3000);
+				
+				
+				/*-------------------------------/
+				 * 
+				 */
+				
+				// primeira linha inclinada
+				g.drawLine(74, 0, 0, 90);
+				
+				
+
+				// second linha inclinada
+				
+				
+				
+				
+			   
+				
+				
+
 			}
 		});
-		
+
 	}
 
 	// process messages received by client
 	private void processMessage(String message) {
 		// valid move occurred
-		
+
 		System.out.println("XML que chegou no cliente\n" + message);
-		
-		//Parse XML Response from Server
+
+		// Parse XML Response from Server
 		XStream xt = new XStream();
 		xt.alias("ticTacToe", XMLMoveResponse.class);
 
@@ -196,17 +240,22 @@ public class TicTacToeClient extends JFrame implements Runnable {
 					: Color.pink);
 
 		} // end if
-		else if (response.getMove().getMessage().equals("Invalid move, try again")) {
-			displayMessage(response.getMove().getMessage() + "\n"); // display invalid move
+		else if (response.getMove().getMessage()
+				.equals("Invalid move, try again")) {
+			displayMessage(response.getMove().getMessage() + "\n"); // display
+																	// invalid
+																	// move
 			myTurn = true; // still this client's turn
 		} // end else if
 		else if (response.getMove().getMessage().equals("Opponent moved")) {
-			/*int location = input.nextInt(); // get move location
-			input.nextLine(); // skip newline after int location*/	
-			
+			/*
+			 * int location = input.nextInt(); // get move location
+			 * input.nextLine(); // skip newline after int location
+			 */
+
 			int location = response.getMove().getMove();
-			
-		    int row = location / 3; // calculate row
+
+			int row = location / 3; // calculate row
 			int column = location % 3; // calculate column
 
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
@@ -220,9 +269,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		} // end else if
 
 		else if (response.getMove().getMessage().equals("You Loose")) {
-			/*int location = input.nextInt(); // get move location
-			input.nextLine(); // skip newline after int location
-*/			
+			/*
+			 * int location = input.nextInt(); // get move location
+			 * input.nextLine(); // skip newline after int location
+			 */
 			int location = response.getMove().getMove();
 			int row = location / 3; // calculate row
 			int column = location % 3; // calculate column
@@ -231,27 +281,31 @@ public class TicTacToeClient extends JFrame implements Runnable {
 					: X_MARK)); // mark move
 
 			// Set Color board
-			
-			board[row][column].setBackground(myMark.equals(X_MARK) ?
-			 Color.pink : Color.green);
-			
+
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
+					: Color.green);
+
 			displayMessage("You Loose :-(");
 
 			myTurn = false; // now this client's turn
-			
+
 			drawLine("xml");
-			
+
 		} // end else if
 
 		else if (response.getMove().getMessage().equals("You Win")) {
 
-			displayMessage(response.getMove().getMessage() + "\n"); // display invalid move
+			displayMessage(response.getMove().getMessage() + "\n"); // display
+																	// invalid
+																	// move
 
 			myTurn = false; // now this client's turn
 		} // end else if
 
 		else
-			displayMessage(response.getMove().getMessage() + "\n"); // display the message
+			displayMessage(response.getMove().getMessage() + "\n"); // display
+																	// the
+																	// message
 	} // end method processMessage
 
 	// manipulate outputArea in event-dispatch thread
@@ -266,13 +320,13 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	// utility method to set mark on board in event-dispatch thread
 	private void setMark(final Square squareToMark, final String mark) {
-		//SwingUtilities.invokeLater(new Runnable() {
-			//public void run() {
-				squareToMark.setMark(mark); // set mark in square
+		// SwingUtilities.invokeLater(new Runnable() {
+		// public void run() {
+		squareToMark.setMark(mark); // set mark in square
 
-		//	} // end method run
-		//} // end anonymous inner class
-			//	); // end call to SwingUtilities.invokeLater
+		// } // end method run
+		// } // end anonymous inner class
+		// ); // end call to SwingUtilities.invokeLater
 	} // end method setMark
 
 	// send message to server indicating clicked square
@@ -281,21 +335,19 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		if (myTurn) {
 
 			// Send move by XML
-			
-			
+
 			try {
 				output = new Formatter(connection.getOutputStream());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		/*	xml = null;
-			move = null;
-			xt = null;
-			*/
-			 
-            xmr = new XMLMoveRequest();
+
+			/*
+			 * xml = null; move = null; xt = null;
+			 */
+
+			xmr = new XMLMoveRequest();
 
 			move = new Move();
 			move.setMove(location);
@@ -305,15 +357,12 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			xt = new XStream();
 			xt.alias("ticTacToeMove", XMLMoveRequest.class);
-			 xml = xt.toXML(xmr);
+			xml = xt.toXML(xmr);
 
 			// output.format("%d\n", teste); // send location to server
 			output.format("%s\n", xml); // send location to server
-			
-			
+
 			output.flush();
-			
-			
 
 			myTurn = false; // not my turn anymore
 		} // end if
