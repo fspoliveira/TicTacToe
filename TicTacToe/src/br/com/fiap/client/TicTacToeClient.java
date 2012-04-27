@@ -173,7 +173,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 				 * Horizontal Lines
 				 ******************************/
 
-				// primeira linha horizontal
+				/*// primeira linha horizontal
 				g.drawLine(0, 15, 900, 15);
 
 				// Segunda linha horizontal
@@ -182,36 +182,27 @@ public class TicTacToeClient extends JFrame implements Runnable {
 				// terceira reta Horizontal
 				g.drawLine(0, 75, 900, 75);
 
-				/*****************************
+				*//*****************************
 				 * Vertical Lines
-				 ******************************/
+				 ******************************//*
 
 				// primeira linha vertical
 				g.drawLine(14, 0, 0, 3000);
 
 				// second linha vertical
-			   g.drawLine(46, 0, 0, 3000);
+				g.drawLine(46, 0, 0, 3000);
 
-			g.drawLine(74, 0, 0, 3000);
-				
-				
+				g.drawLine(74, 0, 0, 3000);*/
+
 				/*-------------------------------/
 				 * 
 				 */
-				
-				// primeira linha inclinada
-				g.drawLine(74, 0, 0, 90);
-				
-				
 
-				// second linha inclinada
-				
-				
-				
-				
-			   
-				
-				
+				// primeira linha inclined
+				g.drawLine(90, 0, 0, 90);
+
+				// second linha inclined
+				g.drawLine(0, 0, 90, 90);
 
 			}
 		});
