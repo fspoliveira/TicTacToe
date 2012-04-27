@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import br.com.fiap.bean.DrawLine;
 import br.com.fiap.bean.Mark;
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
@@ -53,7 +54,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private XStream xt;
 	private String xml;
 	private Mark id;
-	
 
 	// set up user-interface and board
 	public TicTacToeClient(String host) {
@@ -164,48 +164,54 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 	} // end method run
 
-	private void drawLine(String xml) {
+	private void drawLine(final DrawLine line) {
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
 				Graphics g = boardPanel.getGraphics();
 				g.setColor(Color.RED);
+				g.drawLine(line.getX1(),line.getY1(),line.getX2(), line.getY2());
 
 				/*****************************
 				 * Horizontal Lines
 				 ******************************/
 
 				// primeira linha horizontal
-			    //g.drawLine(0, 15, 900, 15);
+				// g.drawLine(0, 15, 900, 15);
 
 				// Segunda linha horizontal
-				//g.drawLine(0, 45, 900, 45);
+				// g.drawLine(0, 45, 900, 45);
 
 				// terceira reta Horizontal
-				//g.drawLine(0, 75, 900, 75);
+				// g.drawLine(0, 75, 900, 75);
 
 				/*****************************
 				 * Vertical Lines
 				 ******************************/
 
 				// primeira linha vertical
-				g.drawLine(14, 0, 0, 3000);
+				//g.drawLine(14, 0, 0, 3000);
 
 				// second linha vertical
-				g.drawLine(48, 0, 0, 3000);
+			  // g.drawLine(48, 0, 0, 3000);
 
-			    g.drawLine(78, 0, 0, 3000);
+			//	g.drawLine(78, 0, 0, 3000);
 
 				/*-------------------------------/
 				 * 
 				 */
-
-			/*	// primeira linha inclined
-				g.drawLine(90, 0, 0, 90);
-
-				// second linha inclined
-				g.drawLine(0, 0, 90, 90);*/
+					
+				/*****************************
+				 * Diagonal Lines
+				 ******************************/
+				
+				  // primeira linha inclined
+				 //  g.drawLine(90, 0, 0, 90);
+				  
+				 // second linha inclined
+				 //  g.drawLine(0, 0, 90, 90);
+				 
 
 			}
 		});
@@ -270,7 +276,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			int location = response.getMove().getMove();
 			int row = location / 3; // calculate row
 			int column = location % 3; // calculate column
-
+			
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
 
@@ -281,9 +287,16 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			displayMessage("You Loose :-(");
 
+			DrawLine drawLine = new DrawLine(response.getLine().getX1(),
+					response.getLine().getY1(),
+					response.getLine().getX2(),
+					response.getLine().getY2());
+			drawLine(drawLine);
+			
 			myTurn = false; // now this client's turn
+			
 
-			drawLine("xml");
+			//drawLine("xml");
 
 		} // end else if
 
@@ -342,7 +355,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			 */
 
 			xmr = new XMLMoveRequest();
-			
+
 			id = new Mark(myMark);
 
 			move = new Move();
@@ -351,7 +364,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			move.setId(id);
 
 			xmr.setMovePlayer(move);
-			
 
 			xt = new XStream();
 			xt.alias("ticTacToeMove", XMLMoveRequest.class);

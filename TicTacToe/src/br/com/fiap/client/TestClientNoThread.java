@@ -3,8 +3,8 @@ package br.com.fiap.client;
 import javax.swing.JFrame;
 
 public class TestClientNoThread {
-	
-	public static void main(String [] args){
+
+	public static void main(String[] args) {
 
 		TicTacToeClient application; // declare client application
 

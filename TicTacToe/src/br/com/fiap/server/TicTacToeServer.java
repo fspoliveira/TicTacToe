@@ -18,6 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import br.com.fiap.bean.DrawLine;
 import br.com.fiap.bean.Mark;
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
@@ -28,7 +29,6 @@ import com.thoughtworks.xstream.XStream;
 
 public class TicTacToeServer extends JFrame {
 	/**
-	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String[] board = new String[9]; // tic-tac-toe board
@@ -44,6 +44,7 @@ public class TicTacToeServer extends JFrame {
 	private Condition otherPlayerConnected; // to wait for other player
 	private Condition otherPlayerTurn; // to wait for other player's turn
 	private boolean weHaveAWinner = false;
+	private DrawLine line;
 
 	// set up tic-tac-toe server and GUI that displays messages
 	public TicTacToeServer() {
@@ -128,8 +129,10 @@ public class TicTacToeServer extends JFrame {
 							.equals(MARKS[player]))
 					|| (board[3].equals(MARKS[player]) && board[6]
 							.equals(MARKS[player]))) {
+
 				return true;
 			}
+
 		} else if (location == 1) {
 			if ((board[0].equals(MARKS[player]) && board[2]
 					.equals(MARKS[player]))
@@ -170,6 +173,17 @@ public class TicTacToeServer extends JFrame {
 					.equals(MARKS[player]))
 					|| (board[3].equals(MARKS[player]) && board[4]
 							.equals(MARKS[player]))) {
+				
+				if ((board[2].equals(MARKS[player]) && board[8]
+						.equals(MARKS[player]))){
+					line = new DrawLine(78, 0, 0, 3000);
+					
+				}
+				else if (board[3].equals(MARKS[player]) && board[4]
+						.equals(MARKS[player])){
+					line = new DrawLine(0, 45, 900, 45);
+				}
+					
 				return true;
 			}
 		} else if (location == 6) {
@@ -185,10 +199,20 @@ public class TicTacToeServer extends JFrame {
 			if ((board[1].equals(MARKS[player]) && board[4]
 					.equals(MARKS[player]))
 					|| (board[6].equals(MARKS[player]) && board[8]
-							.equals(MARKS[player])))
+							.equals(MARKS[player]))) {
 
-			{
+				// Draw Line
+				if (board[1].equals(MARKS[player])
+						&& board[4].equals(MARKS[player])) {
+					line = new DrawLine(48, 0, 0, 3000);
+
+				} else if ((board[6].equals(MARKS[player]) && board[8]
+						.equals(MARKS[player]))) {
+					line = new DrawLine(0, 75, 900, 75);
+
+				}
 				return true;
+
 			}
 		} else if (location == 8) {
 			if ((board[5].equals(MARKS[player]) && board[2]
@@ -197,6 +221,23 @@ public class TicTacToeServer extends JFrame {
 							.equals(MARKS[player]))
 					|| (board[6].equals(MARKS[player]) && board[7]
 							.equals(MARKS[player]))) {
+
+				// Draw Line
+				if (board[4].equals(MARKS[player])
+						&& board[0].equals(MARKS[player])) {
+					line = new DrawLine(0, 0, 90, 90);
+
+				} else if (board[5].equals(MARKS[player])
+						&& board[2].equals(MARKS[player])) {
+					line = new DrawLine(78, 0, 0, 3000);
+
+				} else if (board[6].equals(MARKS[player])
+						&& board[7].equals(MARKS[player])) {
+
+					line = new DrawLine(0, 75, 900, 75);
+
+				}
+
 				return true;
 			}
 		}
@@ -308,7 +349,8 @@ public class TicTacToeServer extends JFrame {
 				 * location);
 				 */
 
-				output.format("%s\n", createXMLResponse("You Loose", location));
+				output.format("%s\n",
+						createXMLResponse("You Loose", location, line));
 				output.flush(); // flush output
 
 			}
@@ -340,6 +382,22 @@ public class TicTacToeServer extends JFrame {
 
 		}
 
+		public String createXMLResponse(String msg, int location, DrawLine line) {
+			markPlayer = new Mark(mark);
+			move = new Move(location, msg);
+
+			// Create XML Server Response
+			xmlMoveResponse = new XMLMoveResponse();
+			xmlMoveResponse.setMark(markPlayer);
+			xmlMoveResponse.setMove(move);
+			xmlMoveResponse.setLine(line);
+
+			xstream = new XStream();
+			xstream.alias("ticTacToe", XMLMoveResponse.class);
+			return xstream.toXML(xmlMoveResponse);
+
+		}
+
 		// control thread's execution
 		public void run() {
 			// send client its mark (X or O), process messages from client
@@ -356,20 +414,22 @@ public class TicTacToeServer extends JFrame {
 				xml = xstream.toXML(xmlMoveResponse);
 
 				displayMessage("Player " + mark + " connected\n");
-				
+
 				output.format("%s\n", xml); // send player's mark
 				output.flush(); // flush output
 
 				// if player X, wait for another player to arrive
 				if (playerNumber == PLAYER_X) {
-								
-					/*output.format("%s\n%s", "Player X connected",
-							"Waiting for another player\n");*/
-					
-					//output.format(createXMLResponse("Player X connected" +
-						//	"Waiting for another player",0));
-					
-					//output.flush(); // flush output
+
+					/*
+					 * output.format("%s\n%s", "Player X connected",
+					 * "Waiting for another player\n");
+					 */
+
+					// output.format(createXMLResponse("Player X connected" +
+					// "Waiting for another player",0));
+
+					// output.flush(); // flush output
 
 					gameLock.lock(); // lock game to wait for second player
 
@@ -386,21 +446,21 @@ public class TicTacToeServer extends JFrame {
 					} // end finally
 
 					// send message that other player connected
-					
-					
-					//output.format("Other player connected. Your move.\n");
-					
-					output.format("%s\n",
-							createXMLResponse("Other player connected. Your move.", 0));
-					
+
+					// output.format("Other player connected. Your move.\n");
+
+					output.format(
+							"%s\n",
+							createXMLResponse(
+									"Other player connected. Your move.", 0));
+
 					output.flush(); // flush output
 				} // end if
 				else {
-					//output.format("Player O connected, please wait\n");
-					//output.format("%s\n",
-						//	createXMLResponse("Player O connected, please wait", 0));
-					
-					
+					// output.format("Player O connected, please wait\n");
+					// output.format("%s\n",
+					// createXMLResponse("Player O connected, please wait", 0));
+
 				} // end else
 
 				// while game not over
@@ -409,7 +469,7 @@ public class TicTacToeServer extends JFrame {
 					String xml = "";
 
 					try {
-						//Fix String Buffer (1024) class Scanner
+						// Fix String Buffer (1024) class Scanner
 						input = new Scanner(connection.getInputStream());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -452,28 +512,26 @@ public class TicTacToeServer extends JFrame {
 					// check for valid move
 					if (validateAndMove(location, playerNumber)) {
 						displayMessage("\nlocation: " + location);
-						//output.format("Valid move.\n"); // notify client
-						
-						
+						// output.format("Valid move.\n"); // notify client
+
 						output.format("%s\n",
 								createXMLResponse("Valid move.", 0));
-						
 
 						System.out.println(weHaveAWinner);
 
-						//if (weHaveAWinner)
-							//output.format("You Win :-) \n");
-						//output.format("%s\n",
-							//		createXMLResponse("You Win :-)", 0));
+						// if (weHaveAWinner)
+						// output.format("You Win :-) \n");
+						// output.format("%s\n",
+						// createXMLResponse("You Win :-)", 0));
 
 						output.flush(); // flush output
 					} // end if
 					else // move was invalid
 					{
-						//output.format("Invalid move, try again\n");
+						// output.format("Invalid move, try again\n");
 						output.format("%s\n",
 								createXMLResponse("Invalid move, try again", 0));
-						
+
 						output.flush(); // flush output
 					} // end else
 				} // end while
