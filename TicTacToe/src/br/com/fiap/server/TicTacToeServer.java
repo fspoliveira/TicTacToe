@@ -130,6 +130,16 @@ public class TicTacToeServer extends JFrame {
 					|| (board[3].equals(MARKS[player]) && board[6]
 							.equals(MARKS[player]))) {
 
+				if ((board[1].equals(MARKS[player]) && board[2]
+						.equals(MARKS[player]))) {
+					line = new DrawLine(0, 15, 900, 15);
+
+				} else if (board[3].equals(MARKS[player])
+						&& board[6].equals(MARKS[player])) {
+					line = new DrawLine(14, 0, 0, 3000);
+
+				}
+
 				return true;
 			}
 
@@ -138,6 +148,14 @@ public class TicTacToeServer extends JFrame {
 					.equals(MARKS[player]))
 					|| (board[4].equals(MARKS[player]) && board[7]
 							.equals(MARKS[player]))) {
+
+				if ((board[0].equals(MARKS[player]) && board[2]
+						.equals(MARKS[player]))) {
+					line = new DrawLine(0, 15, 900, 15);
+				} else if (board[4].equals(MARKS[player])
+						&& board[7].equals(MARKS[player])) {
+					line = new DrawLine(48, 0, 0, 3000);
+				}
 
 				return true;
 			}
@@ -148,6 +166,17 @@ public class TicTacToeServer extends JFrame {
 							.equals(MARKS[player]))
 					|| (board[5].equals(MARKS[player]) && board[8]
 							.equals(MARKS[player]))) {
+				
+				if ((board[0].equals(MARKS[player]) && board[1]
+					.equals(MARKS[player]))){
+					line = new DrawLine(0, 15, 900, 15);
+					
+				}else if(board[5].equals(MARKS[player]) && board[8]
+						.equals(MARKS[player])){
+					line = new DrawLine(78, 0, 0, 3000);
+					
+				}
+				
 				return true;
 			}
 		} else if (location == 3) {
@@ -173,17 +202,16 @@ public class TicTacToeServer extends JFrame {
 					.equals(MARKS[player]))
 					|| (board[3].equals(MARKS[player]) && board[4]
 							.equals(MARKS[player]))) {
-				
+
 				if ((board[2].equals(MARKS[player]) && board[8]
-						.equals(MARKS[player]))){
+						.equals(MARKS[player]))) {
 					line = new DrawLine(78, 0, 0, 3000);
-					
-				}
-				else if (board[3].equals(MARKS[player]) && board[4]
-						.equals(MARKS[player])){
+
+				} else if (board[3].equals(MARKS[player])
+						&& board[4].equals(MARKS[player])) {
 					line = new DrawLine(0, 45, 900, 45);
 				}
-					
+
 				return true;
 			}
 		} else if (location == 6) {
