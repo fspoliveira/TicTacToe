@@ -166,17 +166,16 @@ public class TicTacToeServer extends JFrame {
 							.equals(MARKS[player]))
 					|| (board[5].equals(MARKS[player]) && board[8]
 							.equals(MARKS[player]))) {
-				
+
 				if ((board[0].equals(MARKS[player]) && board[1]
-					.equals(MARKS[player]))){
+						.equals(MARKS[player]))) {
 					line = new DrawLine(0, 15, 900, 15);
-					
-				}else if(board[5].equals(MARKS[player]) && board[8]
-						.equals(MARKS[player])){
+
+				} else if (board[5].equals(MARKS[player])
+						&& board[8].equals(MARKS[player])) {
 					line = new DrawLine(78, 0, 0, 3000);
-					
 				}
-				
+
 				return true;
 			}
 		} else if (location == 3) {
@@ -184,6 +183,15 @@ public class TicTacToeServer extends JFrame {
 					.equals(MARKS[player]))
 					|| (board[4].equals(MARKS[player]) && board[5]
 							.equals(MARKS[player]))) {
+
+				if ((board[0].equals(MARKS[player]) && board[6]
+						.equals(MARKS[player]))) {
+					line = new DrawLine(14, 0, 0, 3000);
+
+				} else if ((board[4].equals(MARKS[player]) && board[5]
+						.equals(MARKS[player]))) {
+					line = new DrawLine(0, 45, 900, 45);
+				}
 				return true;
 			}
 		} else if (location == 4) {
@@ -221,6 +229,24 @@ public class TicTacToeServer extends JFrame {
 							.equals(MARKS[player]))
 					|| (board[7].equals(MARKS[player]) && board[8]
 							.equals(MARKS[player]))) {
+
+				// Draw Line
+				if ((board[0].equals(MARKS[player]) && board[3]
+						.equals(MARKS[player]))) {
+
+					line = new DrawLine(4, 0, 0, 3000);
+
+				} else if (board[4].equals(MARKS[player])
+						&& board[2].equals(MARKS[player])) {
+
+					line = new DrawLine(90, 0, 0, 90);
+
+				} else if ((board[7].equals(MARKS[player]) && board[8]
+						.equals(MARKS[player]))) {
+
+					line = new DrawLine(0, 75, 900, 75);
+				}
+
 				return true;
 			}
 		} else if (location == 7) {
@@ -342,9 +368,7 @@ public class TicTacToeServer extends JFrame {
 		private int playerNumber; // tracks which player this is
 		private String mark; // mark for this player
 		private boolean suspended = true; // whether thread is suspended
-		private XMLMoveRequest xmr;
 		private Move move;
-		XStream xt;
 		private Mark markPlayer;
 		private XMLMoveResponse xmlMoveResponse;
 		private XStream xstream;
@@ -377,8 +401,8 @@ public class TicTacToeServer extends JFrame {
 				 * location);
 				 */
 
-				output.format("%s\n",
-						createXMLResponse("You Loose", location, line));
+				output.format("%s\n", createXMLResponse("You Loose", location,
+						line));
 				output.flush(); // flush output
 
 			}
@@ -389,8 +413,8 @@ public class TicTacToeServer extends JFrame {
 				 * location); // send location of move
 				 */
 
-				output.format("%s\n",
-						createXMLResponse("Opponent moved", location));
+				output.format("%s\n", createXMLResponse("Opponent moved",
+						location));
 				output.flush(); // flush output
 			}
 		} // end method otherPlayerMoved
@@ -477,10 +501,8 @@ public class TicTacToeServer extends JFrame {
 
 					// output.format("Other player connected. Your move.\n");
 
-					output.format(
-							"%s\n",
-							createXMLResponse(
-									"Other player connected. Your move.", 0));
+					output.format("%s\n", createXMLResponse(
+							"Other player connected. Your move.", 0));
 
 					output.flush(); // flush output
 				} // end if
@@ -542,8 +564,8 @@ public class TicTacToeServer extends JFrame {
 						displayMessage("\nlocation: " + location);
 						// output.format("Valid move.\n"); // notify client
 
-						output.format("%s\n",
-								createXMLResponse("Valid move.", 0));
+						output.format("%s\n", createXMLResponse("Valid move.",
+								0));
 
 						System.out.println(weHaveAWinner);
 
@@ -557,8 +579,8 @@ public class TicTacToeServer extends JFrame {
 					else // move was invalid
 					{
 						// output.format("Invalid move, try again\n");
-						output.format("%s\n",
-								createXMLResponse("Invalid move, try again", 0));
+						output.format("%s\n", createXMLResponse(
+								"Invalid move, try again", 0));
 
 						output.flush(); // flush output
 					} // end else

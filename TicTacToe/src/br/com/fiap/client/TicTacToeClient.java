@@ -173,46 +173,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 				g.setColor(Color.RED);
 				g.drawLine(line.getX1(),line.getY1(),line.getX2(), line.getY2());
 
-				/*****************************
-				 * Horizontal Lines
-				 ******************************/
-
-				// primeira linha horizontal
-				// g.drawLine(0, 15, 900, 15);
-
-				// Segunda linha horizontal
-				// g.drawLine(0, 45, 900, 45);
-
-				// terceira reta Horizontal
-				// g.drawLine(0, 75, 900, 75);
-
-				/*****************************
-				 * Vertical Lines
-				 ******************************/
-
-				// primeira linha vertical
-				//g.drawLine(14, 0, 0, 3000);
-
-				// second linha vertical
-			  // g.drawLine(48, 0, 0, 3000);
-
-			//	g.drawLine(78, 0, 0, 3000);
-
-				/*-------------------------------/
-				 * 
-				 */
-					
-				/*****************************
-				 * Diagonal Lines
-				 ******************************/
-				
-				  // primeira linha inclined
-				 //  g.drawLine(90, 0, 0, 90);
-				  
-				 // second linha inclined
-				 //  g.drawLine(0, 0, 90, 90);
-				 
-
 			}
 		});
 
@@ -281,7 +241,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 					: X_MARK)); // mark move
 
 			// Set Color board
-
 			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
 					: Color.green);
 
@@ -293,10 +252,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 					response.getLine().getY2());
 			drawLine(drawLine);
 			
-			myTurn = false; // now this client's turn
-			
-
-			//drawLine("xml");
+			myTurn = false; // now this client's turn			
 
 		} // end else if
 
