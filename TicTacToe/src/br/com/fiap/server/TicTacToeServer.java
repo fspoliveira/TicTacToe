@@ -564,8 +564,16 @@ public class TicTacToeServer extends JFrame {
 						displayMessage("\nlocation: " + location);
 						// output.format("Valid move.\n"); // notify client
 
-						output.format("%s\n", createXMLResponse("Valid move.",
-								0));
+						if (weHaveAWinner) {
+							output.format("%s\n", createXMLResponse("You Win",
+									0, line));
+							output.flush(); // flush output
+						} else {
+							output.format("%s\n", createXMLResponse(
+									"Valid move.", 0));
+							output.flush(); // flush output
+
+						}
 
 						System.out.println(weHaveAWinner);
 
@@ -574,7 +582,6 @@ public class TicTacToeServer extends JFrame {
 						// output.format("%s\n",
 						// createXMLResponse("You Win :-)", 0));
 
-						output.flush(); // flush output
 					} // end if
 					else // move was invalid
 					{

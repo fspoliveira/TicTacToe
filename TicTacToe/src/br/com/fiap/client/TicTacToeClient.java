@@ -189,8 +189,24 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		xt.alias("ticTacToe", XMLMoveResponse.class);
 
 		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(message);
+		
+		if(response.getMove().getMessage().equals("You Win")) {
+			displayMessage("You Win!!!\n");
 
-		if (response.getMove().getMessage().equals("Valid move.")) {
+			setMark(currentSquare, myMark); // set mark in square
+
+			// Set Color for Player
+			currentSquare.setBackground(myMark.equals(X_MARK) ? Color.green
+					: Color.pink);
+			
+			DrawLine drawLine = new DrawLine(response.getLine().getX1(),
+					response.getLine().getY1(),
+					response.getLine().getX2(),
+					response.getLine().getY2());
+			drawLine(drawLine);
+		}
+		
+		else if (response.getMove().getMessage().equals("Valid move.")) {
 			displayMessage("Valid move, please wait.\n");
 
 			setMark(currentSquare, myMark); // set mark in square
