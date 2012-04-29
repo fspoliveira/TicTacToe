@@ -16,13 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import br.com.fiap.bean.DrawLine;
 import br.com.fiap.bean.Mark;
 import br.com.fiap.bean.Move;
 import br.com.fiap.request.XMLMoveRequest;
 import br.com.fiap.response.XMLMoveResponse;
-
+import br.com.fiap.validate.ValidateResponseServer;
 import com.thoughtworks.xstream.XStream;
 
 import java.util.Formatter;
@@ -182,19 +185,34 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	}
 
 	// process messages received by client
-	private void processMessage(String message) {
+	private void processMessage(String xml) {
 		// valid move occurred
 
 		System.out.println("*************************************************");
 		System.out.println("XML Server response in client");
 		System.out.println("*************************************************");
-		System.out.println( message + "\n");
+		System.out.println( xml + "\n");
+		
+		//Validate Server XML Response
+		ValidateResponseServer vrs = new ValidateResponseServer(xml);
+		try {
+			vrs.validateXMLSchema();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Parse XML Response from Server
 		XStream xt = new XStream();
 		xt.alias("ticTacToe", XMLMoveResponse.class);
 
-		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(message);
+		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xml);
 		
 		if(response.getMove().getMessage().equals("You Win")) {
 			displayMessage("You Win :-)\n");
