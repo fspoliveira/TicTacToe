@@ -557,9 +557,10 @@ public class TicTacToeServer extends JFrame {
 					// Get XML Move
 					xml = input.useDelimiter("\\z").next().trim();
 
-					System.out
-							.println("To no server recebendo o movimento do cliente\n"
-									+ xml);
+					System.out.println("*************************************************");
+					System.out.println("Take client moviment in server");
+					System.out.println("*************************************************");
+					System.out.println(xml + "\n");
 
 					// Validate Move
 					validate = new ValidateMove(xml);
@@ -575,9 +576,7 @@ public class TicTacToeServer extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					System.out.println(xml.toString());
-
+					
 					// Parse String Request XMLfrom Client to Object
 					XStream xt = new XStream();
 					xt.alias("ticTacToeMove", XMLMoveRequest.class);
@@ -602,13 +601,6 @@ public class TicTacToeServer extends JFrame {
 							output.flush(); // flush output
 
 						}
-
-						System.out.println(weHaveAWinner);
-
-						// if (weHaveAWinner)
-						// output.format("You Win :-) \n");
-						// output.format("%s\n",
-						// createXMLResponse("You Win :-)", 0));
 
 					} // end if
 					else // move was invalid

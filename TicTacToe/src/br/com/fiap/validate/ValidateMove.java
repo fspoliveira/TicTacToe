@@ -88,7 +88,9 @@ public class ValidateMove {
 
 		try {
 			validator.validate(new DOMSource(document));
-			System.out.println("XML Validate OK");
+			System.out.println("*************************************************");
+			System.out.println("XML send by client Validate OK");
+			System.out.println("*************************************************\n");
 		} catch (SAXException s) {
 			s.printStackTrace();
 			System.exit(1); 

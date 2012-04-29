@@ -124,8 +124,11 @@ public class TicTacToeClient extends JFrame implements Runnable {
 																		// mark
 																		// (X or
 																		// O)
-
-		System.out.println("Metodo run do client\n" + xmlResponse);
+		System.out.println("*************************************************");
+		System.out.println("Method run of client");
+		System.out.println("*************************************************");
+		System.out.println(xmlResponse + "\n");
+		
 
 		// Parse Response String from Server XML to Object
 		XStream xt = new XStream();
@@ -182,7 +185,10 @@ public class TicTacToeClient extends JFrame implements Runnable {
 	private void processMessage(String message) {
 		// valid move occurred
 
-		System.out.println("XML que chegou no cliente\n" + message);
+		System.out.println("*************************************************");
+		System.out.println("XML Server response in client");
+		System.out.println("*************************************************");
+		System.out.println( message + "\n");
 
 		// Parse XML Response from Server
 		XStream xt = new XStream();
