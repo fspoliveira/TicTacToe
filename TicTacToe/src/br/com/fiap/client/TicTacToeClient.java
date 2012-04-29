@@ -191,13 +191,13 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(message);
 		
 		if(response.getMove().getMessage().equals("You Win")) {
-			displayMessage("You Win!!!\n");
+			displayMessage("You Win :-)\n");
 
 			setMark(currentSquare, myMark); // set mark in square
 
 			// Set Color for Player
 			currentSquare.setBackground(myMark.equals(X_MARK) ? Color.green
-					: Color.pink);
+					: Color.yellow);
 			
 			DrawLine drawLine = new DrawLine(response.getLine().getX1(),
 					response.getLine().getY1(),
@@ -213,7 +213,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 			// Set Color for Player
 			currentSquare.setBackground(myMark.equals(X_MARK) ? Color.green
-					: Color.pink);
+					: Color.yellow);
 
 		} // end if
 		else if (response.getMove().getMessage()
@@ -237,7 +237,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
 					: X_MARK)); // mark move
 
-			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.yellow
 					: Color.green);
 
 			displayMessage("Opponent moved. Your turn.\n");
@@ -257,7 +257,7 @@ public class TicTacToeClient extends JFrame implements Runnable {
 					: X_MARK)); // mark move
 
 			// Set Color board
-			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.pink
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.yellow
 					: Color.green);
 
 			displayMessage("You Loose :-(");

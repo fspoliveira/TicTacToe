@@ -234,7 +234,7 @@ public class TicTacToeServer extends JFrame {
 				if ((board[0].equals(MARKS[player]) && board[3]
 						.equals(MARKS[player]))) {
 
-					line = new DrawLine(4, 0, 0, 3000);
+					line = new DrawLine(15, 0, 0, 3000);
 
 				} else if (board[4].equals(MARKS[player])
 						&& board[2].equals(MARKS[player])) {
