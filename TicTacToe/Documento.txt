@@ -1,0 +1,86 @@
+Jogo da Velha (Tic Tac Toe)
+
+O tradicional jogo da velha foi desenvolvido usando as seguintes tecnologias:
+
+- Linguagem de Programação: Java
+- Interface: Java Swing
+- Socket para transferẽncia das jogadas do Cliente para o Servidor
+- Socket para transferência da resposta do Servidor para o Cliente.
+
+Decisoes Tecnologicas
+Socket para transferencias de dados e uma otima solucao transparente e rapida 
+Para parse dos arquivos XML trocados foi usado a biblioteca XStream que faz Java to XML e XML to Java em simples comandos
+
+A solução foi desenvolvida da seguinte maneira:
+Foi criado um servidor que aceita no máximo dois jogadores para iniciar o Jogo da Velha
+O primeiro cliente a se conectar sempre será o jogador "X"
+O segundo cliente que se conectar será o jogador "O"
+Enquanto os dois jogadores não se conectarem a partida não é iniciada
+
+Para testar o jogo executando o servidor e os 2 clientes na mesma máquina, basta executar a classe:
+ 	br.com.fiap.playgame.PlayGame;
+ Esta classe abrirá um thread para se jogar o jogo como se tivesse sendo executado de máquinas diferentes 
+
+O jogador "X" sempre será da cor Verde
+Enquanto o jogador "O" será da cor amarela
+
+Quando um jogador ganha, uma linha vermelha é desenhada na tela, demonstrando qual a jogada que foi a vencedora.
+
+Em caso de empata uma mensagem é enviada
+
+Exemplo de uma jogada sendo recuperada no servidor
+As jogadas enviadas pelo cliente para o servidor são validadas pelo arquivo Move.xsd
+
+*************************************************
+Take client moviment in server
+*************************************************
+<ticTacToeMove>
+  <movePlayer>
+    <move>5</move>
+    <message></message>
+    <id>
+      <mark>X</mark>
+    </id>
+  </movePlayer>
+</ticTacToeMove>
+
+Exemplo de uma resposta do servidor enviando a resposta da jogada para o cliente
+As jogadas enviadas do servidor para o cliente são validadas pelo arquivo ServerResponse.xsd
+
+*************************************************
+XML Server response in client
+*************************************************
+<ticTacToe>
+  <mark>
+    <mark>O</mark>
+  </mark>
+  <move>
+    <move>5</move>
+    <message>Opponent moved</message>
+  </move>
+</ticTacToe>
+
+Exemplo de uma resposta do servidor enviando as coordenadas na tag line
+Quando algum jogador ganha, as coordernadas da linha sao enviadas para os clientes desenharem a linha
+
+*************************************************
+XML Server response in client
+*************************************************
+<ticTacToe>
+  <mark>
+    <mark>X</mark>
+  </mark>
+  <move>
+    <move>0</move>
+    <message>You Win</message>
+  </move>
+  <line>
+    <x1>0</x1>
+    <y1>45</y1>
+    <x2>900</x2>
+    <y2>45</y2>
+  </line>
+</ticTacToe>
+
+
+				 
