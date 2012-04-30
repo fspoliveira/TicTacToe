@@ -214,7 +214,12 @@ public class TicTacToeClient extends JFrame implements Runnable {
 
 		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xml);
 		
-		if(response.getMove().getMessage().equals("You Win")) {
+		if (response.getMove().getMessage().equals("It's a tie")){
+			myTurn = false; 
+			//setMark(currentSquare, myMark); // set mark in square
+			displayMessage("It's a tie\n");
+		}
+		else if(response.getMove().getMessage().equals("You Win")) {
 			displayMessage("You Win :-)\n");
 
 			setMark(currentSquare, myMark); // set mark in square
@@ -345,10 +350,6 @@ public class TicTacToeClient extends JFrame implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			/*
-			 * xml = null; move = null; xt = null;
-			 */
 
 			xmr = new XMLMoveRequest();
 

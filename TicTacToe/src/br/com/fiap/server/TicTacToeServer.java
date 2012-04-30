@@ -383,6 +383,33 @@ public class TicTacToeServer extends JFrame {
 			return false; // location is not occupied
 	} // end method isOccupied
 
+	public boolean tie() {
+
+		if ((board[0].equals(MARKS[PLAYER_X]) || board[0]
+				.equals(MARKS[PLAYER_O]))
+				&&
+
+				(board[1].equals(MARKS[PLAYER_X]) || board[1]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[2].equals(MARKS[PLAYER_X]) || board[2]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[3].equals(MARKS[PLAYER_X]) || board[3]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[4].equals(MARKS[PLAYER_X]) || board[4]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[5].equals(MARKS[PLAYER_X]) || board[5]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[6].equals(MARKS[PLAYER_X]) || board[6]
+						.equals(MARKS[PLAYER_O]))
+				&& (board[7].equals(MARKS[PLAYER_X]) || board[7]
+						.equals(MARKS[PLAYER_O]))) {
+
+			return true;
+		}
+
+		return false;
+	}
+
 	// place code in this method to determine whether game over
 	public boolean isGameOver() {
 		return false; // this is left as an exercise
@@ -557,9 +584,11 @@ public class TicTacToeServer extends JFrame {
 					// Get XML Move
 					xml = input.useDelimiter("\\z").next().trim();
 
-					System.out.println("*************************************************");
+					System.out
+							.println("*************************************************");
 					System.out.println("Take client moviment in server");
-					System.out.println("*************************************************");
+					System.out
+							.println("*************************************************");
 					System.out.println(xml + "\n");
 
 					// Validate Move
@@ -576,7 +605,7 @@ public class TicTacToeServer extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+
 					// Parse String Request XMLfrom Client to Object
 					XStream xt = new XStream();
 					xt.alias("ticTacToeMove", XMLMoveRequest.class);
@@ -586,34 +615,41 @@ public class TicTacToeServer extends JFrame {
 
 					location = move.getMove();
 
-					// check for valid move
-					if (validateAndMove(location, playerNumber)) {
-						displayMessage("\nlocation: " + location);
-						// output.format("Valid move.\n"); // notify client
-
-						if (weHaveAWinner) {
-							output.format("%s\n", createXMLResponse("You Win",
-									0, line));
-							output.flush(); // flush output
-						} else {
-							output.format("%s\n", createXMLResponse(
-									"Valid move.", 0));
-							output.flush(); // flush output
-
-						}
-
-					} // end if
-					else // move was invalid
-					{
-						// output.format("Invalid move, try again\n");
-						output.format("%s\n", createXMLResponse(
-								"Invalid move, try again", 0));
-
+					if (tie()) {
+						output.format("%s\n",
+								createXMLResponse("It's a tie", 0));
 						output.flush(); // flush output
-					} // end else
-				} // end while
-			} // end try
-			finally {
+					} else {
+
+						// check for valid move
+
+						if (validateAndMove(location, playerNumber)) {
+							displayMessage("\nlocation: " + location);
+							// output.format("Valid move.\n"); // notify client
+
+							if (weHaveAWinner) {
+								output.format("%s\n", createXMLResponse(
+										"You Win", 0, line));
+								output.flush(); // flush output
+							} else {
+								output.format("%s\n", createXMLResponse(
+										"Valid move.", 0));
+								output.flush(); // flush output
+
+							}
+
+						} // end if
+						else // move was invalid
+						{
+							// output.format("Invalid move, try again\n");
+							output.format("%s\n", createXMLResponse(
+									"Invalid move, try again", 0));
+
+							output.flush(); // flush output
+						} // end else
+					} // end while
+				} // end try
+			} finally {
 				try {
 					connection.close(); // close connection to client
 				} // end try
