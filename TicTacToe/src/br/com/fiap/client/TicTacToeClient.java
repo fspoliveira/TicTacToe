@@ -215,9 +215,28 @@ public class TicTacToeClient extends JFrame implements Runnable {
 		XMLMoveResponse response = (XMLMoveResponse) xt.fromXML(xml);
 		
 		if (response.getMove().getMessage().equals("It's a tie")){
-			myTurn = false; 
-			//setMark(currentSquare, myMark); // set mark in square
+			
+			int location = response.getMove().getMove();
+
+			int row = location / 3; // calculate row
+			int column = location % 3; // calculate column
+			
+			setMark(board[row][column], (myMark.equals(X_MARK) ? O_MARK
+					: X_MARK)); // mark move
+
+			board[row][column].setBackground(myMark.equals(X_MARK) ? Color.yellow
+					: Color.green);
+			
+			setMark(currentSquare, myMark); // set mark in square
+
+			// Set Color for Player
+			currentSquare.setBackground(myMark.equals(X_MARK) ? Color.green
+					: Color.yellow);
+			
+			
 			displayMessage("It's a tie\n");
+			
+			myTurn = false; 
 		}
 		else if(response.getMove().getMessage().equals("You Win")) {
 			displayMessage("You Win :-)\n");

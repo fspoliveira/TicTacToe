@@ -402,6 +402,9 @@ public class TicTacToeServer extends JFrame {
 				&& (board[6].equals(MARKS[PLAYER_X]) || board[6]
 						.equals(MARKS[PLAYER_O]))
 				&& (board[7].equals(MARKS[PLAYER_X]) || board[7]
+						.equals(MARKS[PLAYER_O]))
+
+				&& (board[8].equals(MARKS[PLAYER_X]) || board[8]
 						.equals(MARKS[PLAYER_O]))) {
 
 			return true;
@@ -468,9 +471,19 @@ public class TicTacToeServer extends JFrame {
 				 * location); // send location of move
 				 */
 
-				output.format("%s\n", createXMLResponse("Opponent moved",
-						location));
-				output.flush(); // flush output
+				// Alterar aqui
+				if (tie()) {
+					output.format("%s\n", createXMLResponse("It's a tie",
+							location));
+					output.flush(); // flush output
+				}
+
+				else {
+					output.format("%s\n", createXMLResponse("Opponent moved",
+							location));
+					output.flush(); // flush output
+				}
+
 			}
 		} // end method otherPlayerMoved
 
@@ -615,39 +628,39 @@ public class TicTacToeServer extends JFrame {
 
 					location = move.getMove();
 
-					if (tie()) {
-						output.format("%s\n",
-								createXMLResponse("It's a tie", 0));
-						output.flush(); // flush output
-					} else {
+					// check for valid move
 
-						// check for valid move
+					if (validateAndMove(location, playerNumber)) {
+						displayMessage("\nlocation: " + location);
+						// output.format("Valid move.\n"); // notify client
 
-						if (validateAndMove(location, playerNumber)) {
-							displayMessage("\nlocation: " + location);
-							// output.format("Valid move.\n"); // notify client
-
-							if (weHaveAWinner) {
-								output.format("%s\n", createXMLResponse(
-										"You Win", 0, line));
-								output.flush(); // flush output
-							} else {
-								output.format("%s\n", createXMLResponse(
-										"Valid move.", 0));
-								output.flush(); // flush output
-
-							}
-
-						} // end if
-						else // move was invalid
-						{
-							// output.format("Invalid move, try again\n");
-							output.format("%s\n", createXMLResponse(
-									"Invalid move, try again", 0));
-
+						if (weHaveAWinner) {
+							output.format("%s\n", createXMLResponse("You Win",
+									0, line));
 							output.flush(); // flush output
-						} // end else
-					} // end while
+						} else if (tie()) {
+							output.format("%s\n", createXMLResponse(
+									"It's a tie", 0));
+							output.flush(); // flush output
+
+						} else {
+							output.format("%s\n", createXMLResponse(
+									"Valid move.", 0));
+							output.flush(); // flush output
+
+						}
+
+					} // end if
+
+					else // move was invalid
+					{
+						// output.format("Invalid move, try again\n");
+						output.format("%s\n", createXMLResponse(
+								"Invalid move, try again", 0));
+
+						output.flush(); // flush output
+					} // end else
+					// } // end while
 				} // end try
 			} finally {
 				try {
